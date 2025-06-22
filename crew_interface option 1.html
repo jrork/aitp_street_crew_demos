@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crew Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            padding: 10px;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-content {
+            margin-bottom: 15px;
+        }
+
+        .entrance-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .color-filter {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .audio-toggle {
+            padding: 8px 12px;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .audio-toggle.muted {
+            background: #999;
+        }
+
+        .tabs {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            background: white;
+            border-radius: 0;
+            margin: 0;
+            overflow: hidden;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 8px;
+            text-align: center;
+            background: #f8f8f8;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+        }
+
+        .tab.active {
+            background: #007AFF;
+            color: white;
+        }
+
+        .tab-badge {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            background: #FF3B30;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 9px;
+            min-width: 14px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .vehicle-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .vehicle-bar {
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .vehicle-bar:active {
+            transform: scale(0.98);
+        }
+
+        .vehicle-bar.selected {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transform: translateY(-2px);
+        }
+
+        .vehicle-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .booth-vehicle {
+            font-size: 18px;
+        }
+
+        .timer {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: none;
+            flex-direction: row;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 0;
+        }
+
+        .action-buttons.show {
+            display: flex;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #007AFF;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .action-btn:active {
+            background: #0056CC;
+        }
+
+        .action-btn.secondary {
+            background: #34C759;
+        }
+
+        .action-btn.danger {
+            background: #FF9500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .reset-demo {
+            margin-top: 30px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .reset-btn {
+            background: #8E8E93;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: #6D6D7A;
+        }
+
+        .reset-btn:active {
+            background: #5A5A62;
+        }
+
+        /* Section Colors */
+        .color-red { background-color: #FF3B30; }
+        .color-green { background-color: #34C759; }
+        .color-blue { background-color: #007AFF; }
+        .color-yellow { background-color: #FFCC00; }
+        .color-purple { background-color: #AF52DE; }
+        .color-orange { background-color: #FF9500; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="entrance-name">Main Entrance - Channel 4</div>
+        <div class="header-controls">
+            <select class="color-filter" id="colorFilter">
+                <option value="all">All Colors</option>
+                <option value="red">Red Section</option>
+                <option value="green">Green Section</option>
+                <option value="blue">Blue Section</option>
+                <option value="yellow">Yellow Section</option>
+                <option value="purple">Purple Section</option>
+                <option value="orange">Orange Section</option>
+            </select>
+            <button class="audio-toggle" id="audioToggle">🔊</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="tab-content active" id="waiting">
+            <div class="vehicle-list">
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-red" data-vehicle="412" data-color="red">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">412 Small Car</span>
+                            <span class="timer">05:23</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Send</button>
+                        <button class="action-btn danger">Hold</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-green" data-vehicle="317" data-color="green">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">317 Truck + Trailer</span>
+                            <span class="timer">02:45</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Send</button>
+                        <button class="action-btn danger">Hold</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-blue" data-vehicle="205" data-color="blue">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">205 Van</span>
+                            <span class="timer">01:12</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Send</button>
+                        <button class="action-btn danger">Hold</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="holding">
+            <div class="vehicle-list">
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-yellow" data-vehicle="156" data-color="yellow">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">156 SUV</span>
+                            <span class="timer">15:30</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="enroute">
+            <div class="vehicle-list">
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-purple" data-vehicle="89" data-color="purple">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">89 Small Car</span>
+                            <span class="timer">03:15</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Start Unload</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-orange" data-vehicle="234" data-color="orange">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">234 Pickup Truck</span>
+                            <span class="timer">01:45</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Start Unload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="unloading">
+            <div class="vehicle-list">
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-red" data-vehicle="78" data-color="red">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">78 Van</span>
+                            <span class="timer">12:30</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Complete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="done">
+            <div class="vehicle-list">
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-green" data-vehicle="45" data-color="green">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">45 Small Car</span>
+                            <span class="timer">Total: 18:45</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-blue" data-vehicle="123" data-color="blue">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">123 SUV</span>
+                            <span class="timer">Total: 22:10</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                    </div>
+                </div>
+            </div>
+            <div class="reset-demo">
+                <button class="reset-btn" id="resetDemo">🔄 Reset Demo</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="waiting">
+            Waiting
+            <span class="tab-badge">3</span>
+        </button>
+        <button class="tab" data-tab="holding">
+            Holding
+            <span class="tab-badge">1</span>
+        </button>
+        <button class="tab" data-tab="enroute">
+            En Route
+            <span class="tab-badge">2</span>
+        </button>
+        <button class="tab" data-tab="unloading">
+            Unloading
+            <span class="tab-badge">1</span>
+        </button>
+        <button class="tab" data-tab="done">
+            Done
+            <span class="tab-badge">5</span>
+        </button>
+    </div>
+
+    <script>
+        let selectedVehicle = null;
+        let audioEnabled = true;
+
+        function handleAction(action, vehicleId) {
+            console.log(`handleAction called: ${action} for vehicle: ${vehicleId}`);
+            
+            try {
+                const vehicleBar = document.querySelector(`[data-vehicle="${vehicleId}"]`);
+                console.log('Found vehicle bar:', vehicleBar);
+                
+                if (!vehicleBar) {
+                    console.error('Vehicle bar not found!');
+                    return;
+                }
+                
+                const vehicleItem = vehicleBar.closest('.vehicle-item');
+                console.log('Found vehicle item:', vehicleItem);
+                
+                if (action === 'Picture') {
+                    alert(`Showing picture for vehicle ${vehicleId}`);
+                    return;
+                }
+                
+                // Move vehicle between states
+                let targetTab = null;
+                
+                if (action === 'Send') {
+                    targetTab = 'enroute';
+                    console.log('Moving to en route');
+                } else if (action === 'Hold') {
+                    targetTab = 'holding';
+                    console.log('Moving to holding');
+                } else if (action === 'Start Unload') {
+                    targetTab = 'unloading';
+                    console.log('Moving to unloading');
+                } else if (action === 'Complete') {
+                    targetTab = 'done';
+                    console.log('Moving to done');
+                }
+                
+                if (targetTab) {
+                    console.log('Target tab:', targetTab);
+                    moveVehicleToTab(vehicleItem, targetTab, action);
+                } else {
+                    console.log('No target tab determined for action:', action);
+                }
+                
+                hideActionButtons();
+                
+            } catch (error) {
+                console.error('Error in handleAction:', error);
+            }
+        }
+
+        function moveVehicleToTab(vehicleItem, targetTabId, action) {
+            console.log('moveVehicleToTab called with:', vehicleItem, targetTabId, action);
+            
+            try {
+                const targetTab = document.getElementById(targetTabId);
+                console.log('Target tab element:', targetTab);
+                
+                if (!targetTab) {
+                    console.error('Target tab not found:', targetTabId);
+                    return;
+                }
+                
+                const vehicleList = targetTab.querySelector('.vehicle-list');
+                console.log('Vehicle list:', vehicleList);
+                
+                if (!vehicleList) {
+                    console.error('Vehicle list not found in target tab');
+                    return;
+                }
+                
+                // Clone the vehicle item
+                const newVehicleItem = vehicleItem.cloneNode(true);
+                console.log('Cloned vehicle item:', newVehicleItem);
+                
+                // Update action buttons for new state
+                updateActionButtons(newVehicleItem, targetTabId);
+                
+                // Add to new tab
+                vehicleList.appendChild(newVehicleItem);
+                console.log('Added vehicle to new tab');
+                
+                // Remove from current tab
+                vehicleItem.remove();
+                console.log('Removed vehicle from old tab');
+                
+                // Re-attach event listeners to the new vehicle
+                attachVehicleListeners(newVehicleItem);
+                console.log('Reattached listeners');
+                
+                // Update badges
+                updateTabBadges();
+                
+                alert(`Vehicle moved to ${targetTabId} (${action})`);
+                
+            } catch (error) {
+                console.error('Error in moveVehicleToTab:', error);
+            }
+        }
+
+        function updateActionButtons(vehicleItem, tabId) {
+            const actionButtons = vehicleItem.querySelector('.action-buttons');
+            
+            if (tabId === 'holding') {
+                actionButtons.innerHTML = `
+                    <button class="action-btn">Picture</button>
+                    <button class="action-btn secondary">Send</button>
+                `;
+            } else if (tabId === 'enroute') {
+                actionButtons.innerHTML = `
+                    <button class="action-btn">Picture</button>
+                    <button class="action-btn secondary">Start Unload</button>
+                `;
+            } else if (tabId === 'unloading') {
+                actionButtons.innerHTML = `
+                    <button class="action-btn">Picture</button>
+                    <button class="action-btn secondary">Complete</button>
+                `;
+            } else if (tabId === 'done') {
+                actionButtons.innerHTML = `
+                    <button class="action-btn">Picture</button>
+                `;
+            }
+        }
+
+        function updateTabBadges() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                const tabId = tab.dataset.tab;
+                const tabContent = document.getElementById(tabId);
+                const vehicleCount = tabContent.querySelectorAll('.vehicle-item').length;
+                const badge = tab.querySelector('.tab-badge');
+                badge.textContent = vehicleCount;
+            });
+        }
+
+        function hideActionButtons() {
+            document.querySelectorAll('.action-buttons').forEach(buttons => {
+                buttons.classList.remove('show');
+            });
+            document.querySelectorAll('.vehicle-bar').forEach(v => v.classList.remove('selected'));
+            selectedVehicle = null;
+        }
+
+        function attachVehicleListeners(vehicleItem) {
+            const vehicleBar = vehicleItem.querySelector('.vehicle-bar');
+            const actionButtons = vehicleItem.querySelector('.action-buttons');
+            
+            vehicleBar.addEventListener('click', function() {
+                console.log('Vehicle clicked:', this.dataset.vehicle);
+                
+                // If this vehicle is already selected, deselect it
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    actionButtons.classList.remove('show');
+                    selectedVehicle = null;
+                    return;
+                }
+                
+                // Remove selection from all other vehicles
+                document.querySelectorAll('.vehicle-bar').forEach(v => v.classList.remove('selected'));
+                document.querySelectorAll('.action-buttons').forEach(a => a.classList.remove('show'));
+                
+                // Select this vehicle and show its action buttons
+                this.classList.add('selected');
+                actionButtons.classList.add('show');
+                selectedVehicle = this.dataset.vehicle;
+                console.log('Selected vehicle:', selectedVehicle);
+            });
+            
+            // Attach action button listeners
+            actionButtons.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent vehicle selection from firing
+                    const action = this.textContent;
+                    console.log('Button clicked:', action, 'for vehicle:', selectedVehicle);
+                    if (selectedVehicle) {
+                        handleAction(action, selectedVehicle);
+                    }
+                });
+            });
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+                
+                // Hide action buttons when switching tabs
+                hideActionButtons();
+            });
+        });
+
+        // Color filter
+        document.getElementById('colorFilter').addEventListener('change', function() {
+            const selectedColor = this.value;
+            document.querySelectorAll('.vehicle-item').forEach(item => {
+                const bar = item.querySelector('.vehicle-bar');
+                if (selectedColor === 'all' || bar.dataset.color === selectedColor) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            hideActionButtons();
+        });
+
+        // Audio toggle
+        document.getElementById('audioToggle').addEventListener('click', function() {
+            audioEnabled = !audioEnabled;
+            this.classList.toggle('muted');
+            this.textContent = audioEnabled ? '🔊' : '🔇';
+        });
+
+        // Initialize all vehicles on page load
+        document.querySelectorAll('.vehicle-item').forEach(vehicleItem => {
+            attachVehicleListeners(vehicleItem);
+        });
+
+        // Reset demo button
+        document.getElementById('resetDemo').addEventListener('click', function() {
+            if (confirm('Reset all demo data to initial state?')) {
+                location.reload();
+            }
+        });
+
+        // Simulate timer updates
+        setInterval(() => {
+            document.querySelectorAll('.timer').forEach(timer => {
+                if (!timer.textContent.includes('Total:')) {
+                    // Simulate timer increment (in real app, would come from backend)
+                    const parts = timer.textContent.split(':');
+                    let minutes = parseInt(parts[0]);
+                    let seconds = parseInt(parts[1]);
+                    seconds++;
+                    if (seconds >= 60) {
+                        seconds = 0;
+                        minutes++;
+                    }
+                    timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            });
+        }, 1000);
+    </script>
+</body>
+</html>
