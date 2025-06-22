@@ -29,6 +29,32 @@
             align-items: center;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hamburger-menu {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .hamburger-menu:hover {
+            background: #f0f0f0;
+        }
+
+        .art-logo {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
         .main-content {
             margin-bottom: 15px;
         }
@@ -231,26 +257,25 @@
         }
 
         /* Section Colors */
-        .color-red { background-color: #FF3B30; }
-        .color-green { background-color: #34C759; }
         .color-blue { background-color: #007AFF; }
-        .color-yellow { background-color: #FFCC00; }
-        .color-purple { background-color: #AF52DE; }
         .color-orange { background-color: #FF9500; }
+        .color-gray { background-color: #8E8E93; }
+        .color-yellow { background-color: #FFCC00; }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="entrance-name">Main Entrance - Channel 4</div>
+        <div class="header-left">
+            <button class="hamburger-menu">☰</button>
+            <div class="entrance-name">N. Main St. - Channel 4</div>
+        </div>
         <div class="header-controls">
             <select class="color-filter" id="colorFilter">
                 <option value="all">All Colors</option>
-                <option value="red">Red Section</option>
-                <option value="green">Green Section</option>
                 <option value="blue">Blue Section</option>
-                <option value="yellow">Yellow Section</option>
-                <option value="purple">Purple Section</option>
                 <option value="orange">Orange Section</option>
+                <option value="gray">Gray Section</option>
+                <option value="yellow">Yellow Section</option>
             </select>
             <button class="audio-toggle" id="audioToggle">🔊</button>
         </div>
@@ -260,7 +285,7 @@
         <div class="tab-content active" id="waiting">
             <div class="vehicle-list">
                 <div class="vehicle-item">
-                    <div class="vehicle-bar color-red" data-vehicle="412" data-color="red">
+                    <div class="vehicle-bar color-blue" data-vehicle="412" data-color="blue">
                         <div class="vehicle-info">
                             <span class="booth-vehicle">412 Small Car</span>
                             <span class="timer">05:23</span>
@@ -273,7 +298,7 @@
                     </div>
                 </div>
                 <div class="vehicle-item">
-                    <div class="vehicle-bar color-green" data-vehicle="317" data-color="green">
+                    <div class="vehicle-bar color-orange" data-vehicle="317" data-color="orange">
                         <div class="vehicle-info">
                             <span class="booth-vehicle">317 Truck + Trailer</span>
                             <span class="timer">02:45</span>
@@ -286,10 +311,49 @@
                     </div>
                 </div>
                 <div class="vehicle-item">
-                    <div class="vehicle-bar color-blue" data-vehicle="205" data-color="blue">
+                    <div class="vehicle-bar color-yellow" data-vehicle="205" data-color="yellow">
                         <div class="vehicle-info">
                             <span class="booth-vehicle">205 Van</span>
                             <span class="timer">01:12</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Send</button>
+                        <button class="action-btn danger">Hold</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-blue" data-vehicle="889" data-color="blue">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">889 SUV</span>
+                            <span class="timer">00:47</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Send</button>
+                        <button class="action-btn danger">Hold</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-gray" data-vehicle="156" data-color="gray">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">156 Small Car</span>
+                            <span class="timer">03:22</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Send</button>
+                        <button class="action-btn danger">Hold</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-orange" data-vehicle="672" data-color="orange">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">672 Pickup Truck</span>
+                            <span class="timer">01:56</span>
                         </div>
                     </div>
                     <div class="action-buttons">
@@ -304,10 +368,34 @@
         <div class="tab-content" id="holding">
             <div class="vehicle-list">
                 <div class="vehicle-item">
-                    <div class="vehicle-bar color-yellow" data-vehicle="156" data-color="yellow">
+                    <div class="vehicle-bar color-gray" data-vehicle="156" data-color="gray">
                         <div class="vehicle-info">
                             <span class="booth-vehicle">156 SUV</span>
                             <span class="timer">15:30</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Send</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-yellow" data-vehicle="234" data-color="yellow">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">234 Van</span>
+                            <span class="timer">08:15</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Send</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-blue" data-vehicle="567" data-color="blue">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">567 Small Car</span>
+                            <span class="timer">12:42</span>
                         </div>
                     </div>
                     <div class="action-buttons">
@@ -321,7 +409,7 @@
         <div class="tab-content" id="enroute">
             <div class="vehicle-list">
                 <div class="vehicle-item">
-                    <div class="vehicle-bar color-purple" data-vehicle="89" data-color="purple">
+                    <div class="vehicle-bar color-yellow" data-vehicle="89" data-color="yellow">
                         <div class="vehicle-info">
                             <span class="booth-vehicle">89 Small Car</span>
                             <span class="timer">03:15</span>
@@ -344,16 +432,76 @@
                         <button class="action-btn secondary">Start Unload</button>
                     </div>
                 </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-blue" data-vehicle="445" data-color="blue">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">445 SUV</span>
+                            <span class="timer">02:33</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Start Unload</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-gray" data-vehicle="778" data-color="gray">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">778 Van</span>
+                            <span class="timer">04:18</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Start Unload</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-orange" data-vehicle="923" data-color="orange">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">923 Truck + Trailer</span>
+                            <span class="timer">01:07</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Start Unload</button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="tab-content" id="unloading">
             <div class="vehicle-list">
                 <div class="vehicle-item">
-                    <div class="vehicle-bar color-red" data-vehicle="78" data-color="red">
+                    <div class="vehicle-bar color-blue" data-vehicle="78" data-color="blue">
                         <div class="vehicle-info">
                             <span class="booth-vehicle">78 Van</span>
                             <span class="timer">12:30</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Complete</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-yellow" data-vehicle="334" data-color="yellow">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">334 SUV</span>
+                            <span class="timer">08:45</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                        <button class="action-btn secondary">Complete</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-gray" data-vehicle="621" data-color="gray">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">621 Pickup Truck</span>
+                            <span class="timer">15:22</span>
                         </div>
                     </div>
                     <div class="action-buttons">
@@ -367,7 +515,7 @@
         <div class="tab-content" id="done">
             <div class="vehicle-list">
                 <div class="vehicle-item">
-                    <div class="vehicle-bar color-green" data-vehicle="45" data-color="green">
+                    <div class="vehicle-bar color-orange" data-vehicle="45" data-color="orange">
                         <div class="vehicle-info">
                             <span class="booth-vehicle">45 Small Car</span>
                             <span class="timer">Total: 18:45</span>
@@ -378,10 +526,54 @@
                     </div>
                 </div>
                 <div class="vehicle-item">
-                    <div class="vehicle-bar color-blue" data-vehicle="123" data-color="blue">
+                    <div class="vehicle-bar color-gray" data-vehicle="123" data-color="gray">
                         <div class="vehicle-info">
                             <span class="booth-vehicle">123 SUV</span>
                             <span class="timer">Total: 22:10</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-blue" data-vehicle="267" data-color="blue">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">267 Van</span>
+                            <span class="timer">Total: 16:33</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-yellow" data-vehicle="445" data-color="yellow">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">445 Small Car</span>
+                            <span class="timer">Total: 14:22</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-orange" data-vehicle="789" data-color="orange">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">789 Pickup Truck</span>
+                            <span class="timer">Total: 25:17</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Picture</button>
+                    </div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-bar color-gray" data-vehicle="556" data-color="gray">
+                        <div class="vehicle-info">
+                            <span class="booth-vehicle">556 SUV</span>
+                            <span class="timer">Total: 19:44</span>
                         </div>
                     </div>
                     <div class="action-buttons">
@@ -398,23 +590,23 @@
     <div class="tabs">
         <button class="tab active" data-tab="waiting">
             Waiting
-            <span class="tab-badge">3</span>
+            <span class="tab-badge">6</span>
         </button>
         <button class="tab" data-tab="holding">
             Holding
-            <span class="tab-badge">1</span>
+            <span class="tab-badge">3</span>
         </button>
         <button class="tab" data-tab="enroute">
             En Route
-            <span class="tab-badge">2</span>
+            <span class="tab-badge">5</span>
         </button>
         <button class="tab" data-tab="unloading">
             Unloading
-            <span class="tab-badge">1</span>
+            <span class="tab-badge">3</span>
         </button>
         <button class="tab" data-tab="done">
             Done
-            <span class="tab-badge">5</span>
+            <span class="tab-badge">6</span>
         </button>
     </div>
 
