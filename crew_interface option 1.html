@@ -423,19 +423,14 @@
         let audioEnabled = true;
 
         function handleAction(action, vehicleId) {
-            console.log(`handleAction called: ${action} for vehicle: ${vehicleId}`);
-            
             try {
                 const vehicleBar = document.querySelector(`[data-vehicle="${vehicleId}"]`);
-                console.log('Found vehicle bar:', vehicleBar);
                 
                 if (!vehicleBar) {
-                    console.error('Vehicle bar not found!');
                     return;
                 }
                 
                 const vehicleItem = vehicleBar.closest('.vehicle-item');
-                console.log('Found vehicle item:', vehicleItem);
                 
                 if (action === 'Picture') {
                     alert(`Showing picture for vehicle ${vehicleId}`);
@@ -447,78 +442,59 @@
                 
                 if (action === 'Send') {
                     targetTab = 'enroute';
-                    console.log('Moving to en route');
                 } else if (action === 'Hold') {
                     targetTab = 'holding';
-                    console.log('Moving to holding');
                 } else if (action === 'Start Unload') {
                     targetTab = 'unloading';
-                    console.log('Moving to unloading');
                 } else if (action === 'Complete') {
                     targetTab = 'done';
-                    console.log('Moving to done');
                 }
                 
                 if (targetTab) {
-                    console.log('Target tab:', targetTab);
                     moveVehicleToTab(vehicleItem, targetTab, action);
-                } else {
-                    console.log('No target tab determined for action:', action);
                 }
                 
                 hideActionButtons();
                 
             } catch (error) {
-                console.error('Error in handleAction:', error);
+                // Silent error handling
             }
         }
 
         function moveVehicleToTab(vehicleItem, targetTabId, action) {
-            console.log('moveVehicleToTab called with:', vehicleItem, targetTabId, action);
-            
             try {
                 const targetTab = document.getElementById(targetTabId);
-                console.log('Target tab element:', targetTab);
                 
                 if (!targetTab) {
-                    console.error('Target tab not found:', targetTabId);
                     return;
                 }
                 
                 const vehicleList = targetTab.querySelector('.vehicle-list');
-                console.log('Vehicle list:', vehicleList);
                 
                 if (!vehicleList) {
-                    console.error('Vehicle list not found in target tab');
                     return;
                 }
                 
                 // Clone the vehicle item
                 const newVehicleItem = vehicleItem.cloneNode(true);
-                console.log('Cloned vehicle item:', newVehicleItem);
                 
                 // Update action buttons for new state
                 updateActionButtons(newVehicleItem, targetTabId);
                 
                 // Add to new tab
                 vehicleList.appendChild(newVehicleItem);
-                console.log('Added vehicle to new tab');
                 
                 // Remove from current tab
                 vehicleItem.remove();
-                console.log('Removed vehicle from old tab');
                 
                 // Re-attach event listeners to the new vehicle
                 attachVehicleListeners(newVehicleItem);
-                console.log('Reattached listeners');
                 
                 // Update badges
                 updateTabBadges();
                 
-                alert(`Vehicle moved to ${targetTabId} (${action})`);
-                
             } catch (error) {
-                console.error('Error in moveVehicleToTab:', error);
+                // Silent error handling
             }
         }
 
@@ -570,8 +546,6 @@
             const actionButtons = vehicleItem.querySelector('.action-buttons');
             
             vehicleBar.addEventListener('click', function() {
-                console.log('Vehicle clicked:', this.dataset.vehicle);
-                
                 // If this vehicle is already selected, deselect it
                 if (this.classList.contains('selected')) {
                     this.classList.remove('selected');
@@ -588,7 +562,6 @@
                 this.classList.add('selected');
                 actionButtons.classList.add('show');
                 selectedVehicle = this.dataset.vehicle;
-                console.log('Selected vehicle:', selectedVehicle);
             });
             
             // Attach action button listeners
@@ -596,7 +569,6 @@
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation(); // Prevent vehicle selection from firing
                     const action = this.textContent;
-                    console.log('Button clicked:', action, 'for vehicle:', selectedVehicle);
                     if (selectedVehicle) {
                         handleAction(action, selectedVehicle);
                     }

@@ -346,19 +346,14 @@
         let audioEnabled = true;
 
         function handleAction(action, vehicleId) {
-            console.log(`handleAction called: ${action} for vehicle: ${vehicleId}`);
-            
             try {
                 const vehicleBar = document.querySelector(`[data-vehicle="${vehicleId}"]`);
-                console.log('Found vehicle bar:', vehicleBar);
                 
                 if (!vehicleBar) {
-                    console.error('Vehicle bar not found!');
                     return;
                 }
                 
                 const vehicleItem = vehicleBar.closest('.vehicle-item');
-                console.log('Found vehicle item:', vehicleItem);
                 
                 if (action === 'Picture') {
                     alert(`Showing picture for vehicle ${vehicleId}`);
@@ -370,73 +365,57 @@
                 
                 if (action === 'Send') {
                     targetTab = 'enroute';
-                    console.log('Moving to en route');
                 } else if (action === 'Hold') {
                     targetTab = 'holding';
-                    console.log('Moving to holding');
                 } else if (action === 'Start Unload') {
                     targetTab = 'unloading';
-                    console.log('Moving to unloading');
                 } else if (action === 'Complete') {
                     // Remove the vehicle completely for this version
-                    console.log('Completing - removing vehicle');
                     vehicleItem.remove();
                     updateSectionCounts();
                     hideActionButtons();
-                    alert(`Vehicle ${vehicleId} completed and removed`);
                     return;
                 }
                 
                 if (targetTab) {
-                    console.log('Target tab:', targetTab);
                     moveVehicleToSection(vehicleItem, targetTab, action);
                 }
                 
                 hideActionButtons();
                 
             } catch (error) {
-                console.error('Error in handleAction:', error);
+                // Silent error handling
             }
         }
 
         function moveVehicleToSection(vehicleItem, targetSectionId, action) {
-            console.log('moveVehicleToSection called with:', vehicleItem, targetSectionId, action);
-            
             try {
                 const targetSection = document.getElementById(targetSectionId);
-                console.log('Target section element:', targetSection);
                 
                 if (!targetSection) {
-                    console.error('Target section not found:', targetSectionId);
                     return;
                 }
                 
                 // Clone the vehicle item
                 const newVehicleItem = vehicleItem.cloneNode(true);
-                console.log('Cloned vehicle item:', newVehicleItem);
                 
                 // Update action buttons for new state
                 updateActionButtons(newVehicleItem, targetSectionId);
                 
                 // Add to new section
                 targetSection.appendChild(newVehicleItem);
-                console.log('Added vehicle to new section');
                 
                 // Remove from current section
                 vehicleItem.remove();
-                console.log('Removed vehicle from old section');
                 
                 // Re-attach event listeners to the new vehicle
                 attachVehicleListeners(newVehicleItem);
-                console.log('Reattached listeners');
                 
                 // Update section counts
                 updateSectionCounts();
                 
-                alert(`Vehicle moved to ${targetSectionId} (${action})`);
-                
             } catch (error) {
-                console.error('Error in moveVehicleToSection:', error);
+                // Silent error handling
             }
         }
 
@@ -501,8 +480,6 @@
             const actionButtons = vehicleItem.querySelector('.action-buttons');
             
             vehicleBar.addEventListener('click', function() {
-                console.log('Vehicle clicked:', this.dataset.vehicle);
-                
                 // If this vehicle is already selected, deselect it
                 if (this.classList.contains('selected')) {
                     this.classList.remove('selected');
@@ -519,7 +496,6 @@
                 this.classList.add('selected');
                 actionButtons.classList.add('show');
                 selectedVehicle = this.dataset.vehicle;
-                console.log('Selected vehicle:', selectedVehicle);
             });
             
             // Attach action button listeners
@@ -527,7 +503,6 @@
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation(); // Prevent vehicle selection from firing
                     const action = this.textContent;
-                    console.log('Button clicked:', action, 'for vehicle:', selectedVehicle);
                     if (selectedVehicle) {
                         handleAction(action, selectedVehicle);
                     }
