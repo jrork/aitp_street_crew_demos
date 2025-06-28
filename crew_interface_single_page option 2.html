@@ -14,18 +14,26 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f5f5f5;
-            padding: 10px;
+            padding: 0;
+            margin: 0;
         }
 
         .header {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 16px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .main-content {
+            padding: 16px;
+            margin: 0 10px;
         }
 
         .header-left {
@@ -48,35 +56,151 @@
             background: #f0f0f0;
         }
 
-        .entrance-name {
-            font-size: 18px;
-            font-weight: bold;
+        .hamburger-submenu {
+            position: absolute;
+            top: 60px;
+            left: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            z-index: 1000;
+            display: none;
+            border: 1px solid #e0e0e0;
         }
 
-        .header-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+        .hamburger-submenu.show {
+            display: block;
         }
 
-        .color-filter {
+        .submenu-user {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .user-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .submenu-controls {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .submenu-color-filter {
+            width: 100%;
             padding: 8px 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
             background: white;
+            font-size: 14px;
         }
 
-        .audio-toggle {
-            padding: 8px 12px;
+        .color-dots {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0;
+        }
+
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .color-dot.selected {
+            border-color: #333;
+            transform: scale(1.2);
+        }
+
+        .color-dot.all {
+            background: linear-gradient(45deg, #007AFF 25%, #FF9500 25%, #FF9500 50%, #8E8E93 50%, #8E8E93 75%, #FFCC00 75%);
+        }
+
+        .color-dot.blue { background: #007AFF; }
+        .color-dot.orange { background: #FF9500; }
+        .color-dot.gray { background: #8E8E93; }
+        .color-dot.yellow { background: #FFCC00; }
+
+        .submenu-audio-toggle {
+            width: 100%;
+            padding: 10px 12px;
             background: #007AFF;
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
         }
 
-        .audio-toggle.muted {
+        .submenu-audio-toggle.muted {
             background: #999;
+        }
+
+        .submenu-item {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            color: #666;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+
+        .submenu-item:hover {
+            background: #f8f9fa;
+        }
+
+        .submenu-item.logout {
+            color: #FF3B30;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .entrance-name {
+            font-size: 18px;
+            font-weight: bold;
         }
 
         .section {
@@ -98,6 +222,28 @@
             background: #f8f9fa;
             border-left: 5px solid #ddd;
             position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .section-header:hover {
+            background: #e9ecef;
+        }
+
+        .section-header-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .expand-icon {
+            font-size: 12px;
+            transition: transform 0.2s;
+            color: #666;
+        }
+
+        .expand-icon.collapsed {
+            transform: rotate(-90deg);
         }
 
         .section-header.waiting {
@@ -127,6 +273,21 @@
             font-size: 14px;
             color: #666;
             border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .collapsible-content {
+            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+            overflow: hidden;
+        }
+
+        .collapsible-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .collapsible-content:not(.collapsed) {
+            max-height: 2000px;
+            opacity: 1;
         }
 
         .vehicle-list {
@@ -207,9 +368,13 @@
 
         .empty-state {
             text-align: center;
-            padding: 20px;
+            padding: 40px 20px;
             color: #999;
             font-style: italic;
+            font-size: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 10px;
         }
 
         /* Section Colors */
@@ -222,262 +387,297 @@
 <body>
     <div class="header">
         <div class="header-left">
-            <button class="hamburger-menu">☰</button>
+            <button class="hamburger-menu" id="hamburgerMenu">☰</button>
+            <div class="hamburger-submenu" id="hamburgerSubmenu">
+                <div class="submenu-user">
+                    <div class="user-label">Logged in as</div>
+                    <div class="user-name">Alex Chen</div>
+                </div>
+                <div class="submenu-controls">
+                    <div class="control-group">
+                        <label class="control-label">Section Filter</label>
+                        <div class="color-dots" id="colorFilter">
+                            <div class="color-dot all selected" data-color="all"></div>
+                            <div class="color-dot blue" data-color="blue"></div>
+                            <div class="color-dot orange" data-color="orange"></div>
+                            <div class="color-dot gray" data-color="gray"></div>
+                            <div class="color-dot yellow" data-color="yellow"></div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Audio Notifications</label>
+                        <button class="submenu-audio-toggle" id="audioToggle">🔊 Enabled</button>
+                    </div>
+                </div>
+                <button class="submenu-item logout" id="logoutBtn">Logout</button>
+            </div>
             <div class="entrance-name">N. Main St. - Channel 4</div>
         </div>
-        <div class="header-controls">
-            <select class="color-filter" id="colorFilter">
-                <option value="all">All Colors</option>
-                <option value="blue">Blue Section</option>
-                <option value="orange">Orange Section</option>
-                <option value="gray">Gray Section</option>
-                <option value="yellow">Yellow Section</option>
-            </select>
-            <button class="audio-toggle" id="audioToggle">🔊</button>
-        </div>
     </div>
 
-    <div class="section" id="waiting-section">
-        <div class="section-header waiting">
-            <span>Waiting Queue</span>
-            <span class="section-count" id="waiting-count">6</span>
+    <div class="main-content">
+        <div class="section">
+            <div class="section-header waiting" onclick="toggleSection('waiting-content')">
+                <div class="section-header-content">
+                    <span class="expand-icon" id="waiting-content-icon">▼</span>
+                    <span>Waiting Queue</span>
+                </div>
+                <span class="section-count" id="waiting-count">6</span>
+            </div>
+            <div class="collapsible-content" id="waiting-content">
+                <div class="vehicle-list" id="waiting">
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-blue" data-vehicle="412" data-color="blue">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">412 Small Car</span>
+                                <span class="timer">waiting 5 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn danger">Hold</button>
+                            <button class="action-btn secondary">Send</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-orange" data-vehicle="317" data-color="orange">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">317 Truck + Trailer</span>
+                                <span class="timer">waiting 3 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn danger">Hold</button>
+                            <button class="action-btn secondary">Send</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-yellow" data-vehicle="205" data-color="yellow">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">205 Van</span>
+                                <span class="timer">waiting 1 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn danger">Hold</button>
+                            <button class="action-btn secondary">Send</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-blue" data-vehicle="889" data-color="blue">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">889 SUV</span>
+                                <span class="timer">waiting 1 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn danger">Hold</button>
+                            <button class="action-btn secondary">Send</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-gray" data-vehicle="702" data-color="gray">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">702 Small Car</span>
+                                <span class="timer">waiting 3 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn danger">Hold</button>
+                            <button class="action-btn secondary">Send</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-orange" data-vehicle="672" data-color="orange">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">672 Pickup Truck</span>
+                                <span class="timer">waiting 2 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn danger">Hold</button>
+                            <button class="action-btn secondary">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="vehicle-list" id="waiting">
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-blue" data-vehicle="412" data-color="blue">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">412 Small Car</span>
-                        <span class="timer">05:23</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Send</button>
-                    <button class="action-btn danger">Hold</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-orange" data-vehicle="317" data-color="orange">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">317 Truck + Trailer</span>
-                        <span class="timer">02:45</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Send</button>
-                    <button class="action-btn danger">Hold</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-yellow" data-vehicle="205" data-color="yellow">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">205 Van</span>
-                        <span class="timer">01:12</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Send</button>
-                    <button class="action-btn danger">Hold</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-blue" data-vehicle="889" data-color="blue">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">889 SUV</span>
-                        <span class="timer">00:47</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Send</button>
-                    <button class="action-btn danger">Hold</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-gray" data-vehicle="702" data-color="gray">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">702 Small Car</span>
-                        <span class="timer">03:22</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Send</button>
-                    <button class="action-btn danger">Hold</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-orange" data-vehicle="672" data-color="orange">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">672 Pickup Truck</span>
-                        <span class="timer">01:56</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Send</button>
-                    <button class="action-btn danger">Hold</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="section" id="holding-section">
-        <div class="section-header holding">
-            <span>Holding</span>
-            <span class="section-count" id="holding-count">3</span>
+        <div class="section">
+            <div class="section-header holding" onclick="toggleSection('holding-content')">
+                <div class="section-header-content">
+                    <span class="expand-icon" id="holding-content-icon">▼</span>
+                    <span>Holding</span>
+                </div>
+                <span class="section-count" id="holding-count">3</span>
+            </div>
+            <div class="collapsible-content" id="holding-content">
+                <div class="vehicle-list" id="holding">
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-gray" data-vehicle="501" data-color="gray">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">501 SUV</span>
+                                <span class="timer">waiting 15 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Send</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-yellow" data-vehicle="234" data-color="yellow">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">234 Van</span>
+                                <span class="timer">waiting 11 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Send</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-blue" data-vehicle="567" data-color="blue">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">567 Small Car</span>
+                                <span class="timer">waiting 18 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="vehicle-list" id="holding">
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-gray" data-vehicle="501" data-color="gray">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">501 SUV</span>
-                        <span class="timer">15:30</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Send</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-yellow" data-vehicle="234" data-color="yellow">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">234 Van</span>
-                        <span class="timer">08:15</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Send</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-blue" data-vehicle="567" data-color="blue">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">567 Small Car</span>
-                        <span class="timer">12:42</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Send</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="section" id="enroute-section">
-        <div class="section-header enroute">
-            <span>En Route</span>
-            <span class="section-count" id="enroute-count">5</span>
+        <div class="section">
+            <div class="section-header enroute" onclick="toggleSection('enroute-content')">
+                <div class="section-header-content">
+                    <span class="expand-icon" id="enroute-content-icon">▼</span>
+                    <span>En Route</span>
+                </div>
+                <span class="section-count" id="enroute-count">5</span>
+            </div>
+            <div class="collapsible-content" id="enroute-content">
+                <div class="vehicle-list" id="enroute">
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-yellow" data-vehicle="89" data-color="yellow">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">89 Small Car</span>
+                                <span class="timer">waiting 8 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Start Unload</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-orange" data-vehicle="345" data-color="orange">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">345 Pickup Truck</span>
+                                <span class="timer">waiting 5 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Start Unload</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-blue" data-vehicle="445" data-color="blue">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">445 SUV</span>
+                                <span class="timer">waiting 6 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Start Unload</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-gray" data-vehicle="778" data-color="gray">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">778 Van</span>
+                                <span class="timer">waiting 7 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Start Unload</button>
+                        </div>
+                    </div>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-orange" data-vehicle="923" data-color="orange">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">923 Truck + Trailer</span>
+                                <span class="timer">waiting 4 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Start Unload</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="vehicle-list" id="enroute">
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-yellow" data-vehicle="89" data-color="yellow">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">89 Small Car</span>
-                        <span class="timer">03:15</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Start Unload</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-orange" data-vehicle="345" data-color="orange">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">345 Pickup Truck</span>
-                        <span class="timer">01:45</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Start Unload</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-blue" data-vehicle="445" data-color="blue">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">445 SUV</span>
-                        <span class="timer">02:33</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Start Unload</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-gray" data-vehicle="778" data-color="gray">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">778 Van</span>
-                        <span class="timer">04:18</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Start Unload</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-orange" data-vehicle="923" data-color="orange">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">923 Truck + Trailer</span>
-                        <span class="timer">01:07</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Start Unload</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="section" id="unloading-section">
-        <div class="section-header unloading">
-            <span>Unloading</span>
-            <span class="section-count" id="unloading-count">3</span>
-        </div>
-        <div class="vehicle-list" id="unloading">
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-blue" data-vehicle="78" data-color="blue">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">78 Van</span>
-                        <span class="timer">12:30</span>
-                    </div>
+        <div class="section">
+            <div class="section-header unloading" onclick="toggleSection('unloading-content')">
+                <div class="section-header-content">
+                    <span class="expand-icon" id="unloading-content-icon">▼</span>
+                    <span>Unloading</span>
                 </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Complete</button>
-                </div>
+                <span class="section-count" id="unloading-count">3</span>
             </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-yellow" data-vehicle="334" data-color="yellow">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">334 SUV</span>
-                        <span class="timer">08:45</span>
+            <div class="collapsible-content" id="unloading-content">
+                <div class="vehicle-list" id="unloading">
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-blue" data-vehicle="78" data-color="blue">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">78 Van</span>
+                                <span class="timer">unloading 13 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Complete</button>
+                        </div>
                     </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Complete</button>
-                </div>
-            </div>
-            <div class="vehicle-item">
-                <div class="vehicle-bar color-gray" data-vehicle="621" data-color="gray">
-                    <div class="vehicle-info">
-                        <span class="booth-vehicle">621 Pickup Truck</span>
-                        <span class="timer">15:22</span>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-yellow" data-vehicle="334" data-color="yellow">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">334 SUV</span>
+                                <span class="timer">unloading 9 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Complete</button>
+                        </div>
                     </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn">Picture</button>
-                    <button class="action-btn secondary">Complete</button>
+                    <div class="vehicle-item">
+                        <div class="vehicle-bar color-gray" data-vehicle="621" data-color="gray">
+                            <div class="vehicle-info">
+                                <span class="booth-vehicle">621 Pickup Truck</span>
+                                <span class="timer">unloading 15 min.</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn">Picture</button>
+                            <button class="action-btn secondary">Complete</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -563,6 +763,16 @@
 
         function updateActionButtons(vehicleItem, sectionId) {
             const actionButtons = vehicleItem.querySelector('.action-buttons');
+            const timer = vehicleItem.querySelector('.timer');
+            
+            // Keep the same waiting time when moving between waiting states
+            if (sectionId === 'holding' || sectionId === 'enroute') {
+                const currentText = timer.textContent;
+                if (currentText.includes('waiting')) {
+                    // Keep the same timer text since they're still waiting
+                    timer.textContent = currentText;
+                }
+            }
             
             if (sectionId === 'holding') {
                 actionButtons.innerHTML = `
@@ -587,23 +797,24 @@
             
             sections.forEach(sectionId => {
                 const section = document.getElementById(sectionId);
-                const vehicleCount = section.querySelectorAll('.vehicle-item').length;
+                const vehicleItems = section.querySelectorAll('.vehicle-item');
+                const visibleVehicles = Array.from(vehicleItems).filter(item => item.style.display !== 'none');
+                const vehicleCount = visibleVehicles.length;
                 const countElement = document.getElementById(sectionId + '-count');
                 countElement.textContent = vehicleCount;
                 
-                // Show/hide empty state
-                const sectionContainer = document.getElementById(sectionId + '-section');
+                // Show/hide empty state based on visible vehicles
+                const existingEmptyState = section.querySelector('.empty-state');
                 if (vehicleCount === 0) {
-                    if (!section.querySelector('.empty-state')) {
+                    if (!existingEmptyState) {
                         const emptyState = document.createElement('div');
                         emptyState.className = 'empty-state';
-                        emptyState.textContent = 'No vehicles in this state';
+                        emptyState.textContent = 'No vehicles in this section';
                         section.appendChild(emptyState);
                     }
                 } else {
-                    const emptyState = section.querySelector('.empty-state');
-                    if (emptyState) {
-                        emptyState.remove();
+                    if (existingEmptyState) {
+                        existingEmptyState.remove();
                     }
                 }
             });
@@ -652,9 +863,22 @@
             });
         }
 
-        // Color filter
-        document.getElementById('colorFilter').addEventListener('change', function() {
-            const selectedColor = this.value;
+        // Color filter with dots
+        document.getElementById('colorFilter').addEventListener('click', function(e) {
+            const clickedDot = e.target.closest('.color-dot');
+            if (!clickedDot) return;
+            
+            const selectedColor = clickedDot.dataset.color;
+            
+            // Remove selected class from all dots
+            this.querySelectorAll('.color-dot').forEach(dot => {
+                dot.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked dot
+            clickedDot.classList.add('selected');
+            
+            // Filter vehicles
             document.querySelectorAll('.vehicle-item').forEach(item => {
                 const bar = item.querySelector('.vehicle-bar');
                 if (selectedColor === 'all' || bar.dataset.color === selectedColor) {
@@ -663,16 +887,50 @@
                     item.style.display = 'none';
                 }
             });
+            
             hideActionButtons();
-            updateSectionCounts(); // Update counts after filtering
+            updateSectionCounts();
         });
 
         // Audio toggle
         document.getElementById('audioToggle').addEventListener('click', function() {
             audioEnabled = !audioEnabled;
             this.classList.toggle('muted');
-            this.textContent = audioEnabled ? '🔊' : '🔇';
+            this.textContent = audioEnabled ? '🔊 Enabled' : '🔇 Muted';
         });
+
+        // Hamburger menu toggle
+        document.getElementById('hamburgerMenu').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const submenu = document.getElementById('hamburgerSubmenu');
+            submenu.classList.toggle('show');
+        });
+
+        // Close submenu when clicking outside
+        document.addEventListener('click', function(e) {
+            const submenu = document.getElementById('hamburgerSubmenu');
+            const hamburger = document.getElementById('hamburgerMenu');
+            if (!submenu.contains(e.target) && !hamburger.contains(e.target)) {
+                submenu.classList.remove('show');
+            }
+        });
+
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logging out... (In real app, would redirect to login)');
+                // In real app: window.location.href = '/login';
+            }
+        });
+
+        // Toggle section expand/collapse
+        function toggleSection(contentId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(contentId + '-icon');
+            
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+        }
 
         // Initialize all vehicles on page load
         document.querySelectorAll('.vehicle-item').forEach(vehicleItem => {
@@ -682,20 +940,17 @@
         // Simulate timer updates
         setInterval(() => {
             document.querySelectorAll('.timer').forEach(timer => {
-                if (!timer.textContent.includes('Total:')) {
-                    // Simulate timer increment (in real app, would come from backend)
-                    const parts = timer.textContent.split(':');
-                    let minutes = parseInt(parts[0]);
-                    let seconds = parseInt(parts[1]);
-                    seconds++;
-                    if (seconds >= 60) {
-                        seconds = 0;
-                        minutes++;
-                    }
-                    timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                const text = timer.textContent;
+                if (text.includes('min.')) {
+                    // Extract the state and current minutes
+                    const parts = text.split(' ');
+                    const state = parts[0]; // 'waiting', 'holding', etc.
+                    const currentMinutes = parseInt(parts[1]);
+                    const newMinutes = currentMinutes + 1;
+                    timer.textContent = `${state} ${newMinutes} min.`;
                 }
             });
-        }, 1000);
+        }, 60000); // Update every minute instead of every second
     </script>
 </body>
 </html>
