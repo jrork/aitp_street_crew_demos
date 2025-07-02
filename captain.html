@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captain Interface - N. Main St.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hamburger {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .entrance-info h1 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .entrance-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .audio-toggle {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .audio-toggle.active {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .main-content {
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .add-vehicle-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .add-vehicle-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 16px;
+            transition: transform 0.2s;
+        }
+
+        .add-vehicle-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .add-vehicle-form {
+            display: none;
+            gap: 16px;
+        }
+
+        .add-vehicle-form.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .camera-btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .cancel-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .section-column {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-badge {
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .vehicle-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .vehicle-card.selected {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .vehicle-card.blue { 
+            background: linear-gradient(135deg, #007AFF, #0056CC);
+            color: white;
+        }
+        .vehicle-card.orange { 
+            background: linear-gradient(135deg, #FF9500, #CC7700);
+            color: white;
+        }
+        .vehicle-card.gray { 
+            background: linear-gradient(135deg, #8E8E93, #6D6D70);
+            color: white;
+        }
+        .vehicle-card.yellow { 
+            background: linear-gradient(135deg, #FFCC00, #E6B800);
+            color: #333;
+        }
+
+        .vehicle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vehicle-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .vehicle-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .vehicle-details {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .vehicle-timer {
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .vehicle-actions {
+            display: none;
+            gap: 8px;
+            margin-top: 12px;
+            border-radius: 6px;
+            padding: 12px;
+            margin-left: -6px;
+            margin-right: -6px;
+            margin-bottom: -6px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+        }
+
+        .vehicle-actions.show {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+            animation: slideDown 0.2s ease-out;
+        }
+
+        .vehicle-card.blue .vehicle-actions {
+            background-color: white;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .vehicle-card.orange .vehicle-actions {
+            background-color: white;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .vehicle-card.gray .vehicle-actions {
+            background-color: white;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .vehicle-card.yellow .vehicle-actions {
+            background-color: white;
+            border-top: 1px solid rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .send-btn { 
+            background: #4CAF50 !important; 
+            color: white !important; 
+        }
+        
+        .hold-btn { 
+            background: #FF9500 !important; 
+            color: white !important; 
+        }
+        
+        .delete-btn { 
+            background: #f44336 !important; 
+            color: white !important; 
+        }
+
+        .send-btn:hover { 
+            background: #45a049 !important; 
+        }
+        
+        .hold-btn:hover { 
+            background: #e68900 !important; 
+        }
+        
+        .delete-btn:hover { 
+            background: #da190b !important; 
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #999;
+        }
+
+        .empty-state h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <svg class="hamburger" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <div class="entrance-info">
+                <h1>N. Main St. - Channel 4</h1>
+                <p>Captain Interface</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="audio-toggle active" id="audioToggle">🔊</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="add-vehicle-section">
+            <button class="add-vehicle-btn" id="addVehicleBtn">+ Add New Vehicle</button>
+            <div class="add-vehicle-form" id="addVehicleForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="boothNumber">Booth Number</label>
+                        <input type="text" id="boothNumber" placeholder="e.g., A-123" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sectionColor">Section</label>
+                        <select id="sectionColor" required>
+                            <option value="">Select Section</option>
+                            <option value="blue">Blue Section</option>
+                            <option value="orange">Orange Section</option>
+                            <option value="gray">Gray Section</option>
+                            <option value="yellow">Yellow Section</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicleSize">Vehicle Size</label>
+                        <select id="vehicleSize" required>
+                            <option value="">Select Size</option>
+                            <option value="Car/Van">Car/Van</option>
+                            <option value="SUV/Truck">SUV/Truck</option>
+                            <option value="Truck+Trailer">Truck+Trailer</option>
+                            <option value="Box Truck">Box Truck</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Photo (Optional)</label>
+                        <button type="button" class="camera-btn">📷 Capture</button>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+                    <button type="button" class="submit-btn" id="submitBtn">Add Vehicle</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sections-grid">
+            <!-- New Section -->
+            <div class="section-column">
+                <div class="section-header">
+                    <div class="section-title">
+                        🆕 New
+                    </div>
+                    <div class="section-badge">6</div>
+                </div>
+                
+                <div class="vehicle-card blue">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>456</h3>
+                            <div class="vehicle-details">SUV/Truck</div>
+                        </div>
+                        <div class="vehicle-timer">3m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send</button>
+                        <button class="action-btn hold-btn">Hold</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card orange">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>789</h3>
+                            <div class="vehicle-details">Car/Van</div>
+                        </div>
+                        <div class="vehicle-timer">7m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send</button>
+                        <button class="action-btn hold-btn">Hold</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card yellow">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>144</h3>
+                            <div class="vehicle-details">Box Truck</div>
+                        </div>
+                        <div class="vehicle-timer">11m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send</button>
+                        <button class="action-btn hold-btn">Hold</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card gray">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>299</h3>
+                            <div class="vehicle-details">Truck+Trailer</div>
+                        </div>
+                        <div class="vehicle-timer">15m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send</button>
+                        <button class="action-btn hold-btn">Hold</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card blue">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>222</h3>
+                            <div class="vehicle-details">Car/Van</div>
+                        </div>
+                        <div class="vehicle-timer">19m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send</button>
+                        <button class="action-btn hold-btn">Hold</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card orange">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>888</h3>
+                            <div class="vehicle-details">SUV/Truck</div>
+                        </div>
+                        <div class="vehicle-timer">22m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send</button>
+                        <button class="action-btn hold-btn">Hold</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Send Section -->
+            <div class="section-column">
+                <div class="section-header">
+                    <div class="section-title">
+                        📤 Pending Send
+                    </div>
+                    <div class="section-badge">3</div>
+                </div>
+
+                <div class="vehicle-card yellow">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>321</h3>
+                            <div class="vehicle-details">Box Truck</div>
+                        </div>
+                        <div class="vehicle-timer">12m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send to Crew</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card blue">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>876</h3>
+                            <div class="vehicle-details">Car/Van</div>
+                        </div>
+                        <div class="vehicle-timer">9m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send to Crew</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card gray">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>555</h3>
+                            <div class="vehicle-details">Truck+Trailer</div>
+                        </div>
+                        <div class="vehicle-timer">16m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send to Crew</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Holding Section -->
+            <div class="section-column">
+                <div class="section-header">
+                    <div class="section-title">
+                        ⏸️ Holding
+                    </div>
+                    <div class="section-badge">4</div>
+                </div>
+
+                <div class="vehicle-card gray">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>654</h3>
+                            <div class="vehicle-details">Truck+Trailer</div>
+                        </div>
+                        <div class="vehicle-timer">18m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send to Crew</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card blue">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>987</h3>
+                            <div class="vehicle-details">SUV/Truck</div>
+                        </div>
+                        <div class="vehicle-timer">25m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send to Crew</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card orange">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>443</h3>
+                            <div class="vehicle-details">SUV/Truck</div>
+                        </div>
+                        <div class="vehicle-timer">32m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send to Crew</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="vehicle-card yellow">
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>777</h3>
+                            <div class="vehicle-details">Box Truck</div>
+                        </div>
+                        <div class="vehicle-timer">41m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send to Crew</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Add vehicle form toggle
+        const addVehicleBtn = document.getElementById('addVehicleBtn');
+        const addVehicleForm = document.getElementById('addVehicleForm');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        addVehicleBtn.addEventListener('click', () => {
+            addVehicleForm.classList.add('active');
+            addVehicleBtn.textContent = 'Add New Vehicle';
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            addVehicleForm.classList.remove('active');
+            document.getElementById('boothNumber').value = '';
+            document.getElementById('sectionColor').value = '';
+            document.getElementById('vehicleSize').value = '';
+        });
+
+        // Submit new vehicle
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            const booth = document.getElementById('boothNumber').value;
+            const section = document.getElementById('sectionColor').value;
+            const size = document.getElementById('vehicleSize').value;
+            
+            if (booth && section && size) {
+                // Create new vehicle card
+                const newSection = document.querySelector('.section-column:first-child');
+                const vehicleCards = newSection.querySelectorAll('.vehicle-card');
+                
+                const newCard = document.createElement('div');
+                newCard.className = `vehicle-card ${section}`;
+                newCard.innerHTML = `
+                    <div class="vehicle-header">
+                        <div class="vehicle-info">
+                            <h3>${booth}</h3>
+                            <div class="vehicle-details">${size}</div>
+                        </div>
+                        <div class="vehicle-timer">0m</div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="action-btn send-btn">Send</button>
+                        <button class="action-btn hold-btn">Hold</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    </div>
+                `;
+                
+                // Add to new section
+                newSection.appendChild(newCard);
+                
+                // Update new count
+                const newBadge = newSection.querySelector('.section-badge');
+                newBadge.textContent = parseInt(newBadge.textContent) + 1;
+                
+                // Clear form
+                addVehicleForm.classList.remove('active');
+                document.getElementById('boothNumber').value = '';
+                document.getElementById('sectionColor').value = '';
+                document.getElementById('vehicleSize').value = '';
+                
+                alert(`New vehicle added: ${booth} (${size}) in ${section} section`);
+            } else {
+                alert('Please fill in all required fields');
+            }
+        });
+
+        // Audio toggle
+        document.getElementById('audioToggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            this.textContent = this.classList.contains('active') ? '🔊' : '🔇';
+        });
+
+        // Vehicle card selection and action button display
+        document.addEventListener('click', (e) => {
+            // Handle vehicle card clicks (but not action button clicks)
+            if (e.target.closest('.vehicle-card') && !e.target.closest('.action-btn')) {
+                const clickedCard = e.target.closest('.vehicle-card');
+                const actions = clickedCard.querySelector('.vehicle-actions');
+                const isCurrentlySelected = clickedCard.classList.contains('selected');
+                
+                // Hide all other action menus and remove selection
+                document.querySelectorAll('.vehicle-card').forEach(card => {
+                    card.classList.remove('selected');
+                    card.querySelector('.vehicle-actions').classList.remove('show');
+                });
+                
+                // Toggle current card if it wasn't selected, or select it if it was different
+                if (!isCurrentlySelected) {
+                    clickedCard.classList.add('selected');
+                    actions.classList.add('show');
+                }
+            }
+            
+            // Hide action menus when clicking outside any vehicle card
+            if (!e.target.closest('.vehicle-card')) {
+                document.querySelectorAll('.vehicle-card').forEach(card => {
+                    card.classList.remove('selected');
+                    card.querySelector('.vehicle-actions').classList.remove('show');
+                });
+            }
+        });
+
+        // Vehicle action buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('send-btn') && !e.target.classList.contains('disabled-btn')) {
+                const card = e.target.closest('.vehicle-card');
+                const booth = card.querySelector('h3').textContent;
+                const currentSection = card.closest('.section-column');
+                
+                if (e.target.textContent === 'Send') {
+                    // Move from New to Pending Send
+                    const pendingSection = document.querySelectorAll('.section-column')[1];
+                    e.target.textContent = 'Send to Crew';
+                    e.target.parentElement.innerHTML = `
+                        <button class="action-btn send-btn">Send to Crew</button>
+                        <button class="action-btn delete-btn">Delete</button>
+                    `;
+                    pendingSection.appendChild(card);
+                    
+                    // Update badges
+                    const newBadge = currentSection.querySelector('.section-badge');
+                    const pendingBadge = pendingSection.querySelector('.section-badge');
+                    newBadge.textContent = parseInt(newBadge.textContent) - 1;
+                    pendingBadge.textContent = parseInt(pendingBadge.textContent) + 1;
+                    
+                    // Play audio notification (captain receives notification when vehicles go to pending send)
+                    if (document.getElementById('audioToggle').classList.contains('active')) {
+                        // Simulate audio notification
+                        console.log('🔊 Audio: Vehicle moved to Pending Send');
+                    }
+                    
+                    alert(`${booth} moved to Pending Send`);
+                } else if (e.target.textContent === 'Send to Crew') {
+                    // Move from Pending Send or Holding - vehicle leaves captain's view
+                    alert(`${booth} sent to crew and is now en route`);
+                    
+                    // Update badge and remove card
+                    const currentBadge = currentSection.querySelector('.section-badge');
+                    currentBadge.textContent = parseInt(currentBadge.textContent) - 1;
+                    
+                    card.remove();
+                }
+            }
+            
+            if (e.target.classList.contains('hold-btn')) {
+                const card = e.target.closest('.vehicle-card');
+                const booth = card.querySelector('h3').textContent;
+                const currentSection = card.closest('.section-column');
+                const holdingSection = document.querySelectorAll('.section-column')[2];
+                
+                // Move to Holding
+                e.target.parentElement.innerHTML = `
+                    <button class="action-btn send-btn">Send to Crew</button>
+                    <button class="action-btn delete-btn">Delete</button>
+                `;
+                holdingSection.appendChild(card);
+                
+                // Update badges
+                const newBadge = currentSection.querySelector('.section-badge');
+                const holdingBadge = holdingSection.querySelector('.section-badge');
+                newBadge.textContent = parseInt(newBadge.textContent) - 1;
+                holdingBadge.textContent = parseInt(holdingBadge.textContent) + 1;
+                
+                alert(`${booth} moved to Holding`);
+            }
+            
+            if (e.target.classList.contains('delete-btn')) {
+                const card = e.target.closest('.vehicle-card');
+                const booth = card.querySelector('h3').textContent;
+                const currentSection = card.closest('.section-column');
+                
+                if (confirm(`Delete ${booth} from queue?`)) {
+                    // Update badge
+                    const badge = currentSection.querySelector('.section-badge');
+                    badge.textContent = parseInt(badge.textContent) - 1;
+                    
+                    card.remove();
+                }
+            }
+        });
+
+        // Live timer updates (every minute)
+        setInterval(() => {
+            document.querySelectorAll('.vehicle-timer').forEach(timer => {
+                const currentTime = parseInt(timer.textContent);
+                timer.textContent = `${currentTime + 1}m`;
+            });
+        }, 60000);
+
+        // Camera capture simulation
+        document.querySelector('.camera-btn').addEventListener('click', () => {
+            alert('Camera feature would capture photo here');
+        });
+    </script>
+</body>
+</html>
